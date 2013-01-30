@@ -42,9 +42,10 @@ Usage
 .. note::
     If you use Haystack, you should use::
     
-        $ manage.py build_solr_schema -f var/solr/home/conf/schema.xml
+        $ python manage.py build_solr_schema -f var/solr/home/conf/schema.xml
 
-    in step 3.
+    in step 3. See the ``run_solr_extra_startup_commands`` option below for how
+    to automate this.
 
 
 
@@ -91,6 +92,27 @@ Options
     format. You can use this to provide a directory where you override any
     config files in ``solr_home``. Defaults to
     ``var/<sectionname>/config_overrides``.
+``run_solr_extra_startup_commands``
+    Extra shell commands to run before starting solr in ``run_solr.sh``.
+    Typically used to generate the Haystack schema automatically before
+    starting solr. Example::
+
+        [solr]
+        recipe = solr_recipe
+        ...
+        run_solr_extra_startup_commands =
+            echo "Starting Apache Solr"
+            python ${buildout:directory}/manage.py build_solr_schema -f ${buildout:directory}/var/solr/home/conf/schema.xml
+
+``run_solr_extra_shutdown_commands``
+    Just like ``run_solr_extra_startup_commands``, but these are added to
+    ``run_solr.sh`` after the command to start/run Solr. Example::
+
+        [solr]
+        recipe = solr_recipe
+        ...
+        run_solr_extra_shutdown_commands =
+            echo "Solr was stopped. Exited with exit code $?"
 
 
 .. note::

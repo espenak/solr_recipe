@@ -15,12 +15,20 @@ import shutil
 
 binscript_tpl = """#!/bin/sh
 
+{% if run_solr_extra_startup_commands %}
+{{ run_solr_extra_startup_commands }}
+{% endif %}
+
 cd {{ solrdir }}/example
 {{ java_executable }} \\
     -Djava.util.logging.config.file={{ solr_logconfig_file }} \\
     -Dsolr.solr.home={{ solr_home }} \\
     -Dsolr.data.dir={{ solr_datadir }} \\
     -jar start.jar
+
+{% if run_solr_extra_shutdown_commands %}
+{{ run_solr_extra_shutdown_commands }}
+{% endif %}
 """
 
 logconfig_tpl = """
