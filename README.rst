@@ -38,12 +38,15 @@ Usage
    information about how this works.
 5. Run ``bin/run_solr.sh``
 
-.. note:: If you use Haystack, you should use::
+
+Haystack?
+=========
+If you use Haystack, you should use::
     
         $ python manage.py build_solr_schema -f var/solr/home/conf/schema.xml
 
-    in step 3. See the ``run_solr_extra_startup_commands`` option below for how
-    to automate this.
+in step 3. See the ``run_solr_extra_startup_commands`` option below for how
+to automate this.
 
 
 
