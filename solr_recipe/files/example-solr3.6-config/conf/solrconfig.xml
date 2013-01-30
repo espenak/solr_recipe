@@ -1073,6 +1073,30 @@
        always be executed after the "last-components" 
        
      -->
+   <!-- Spell Check
+
+        The spell check component can return a list of alternative spelling
+        suggestions.  
+
+        http://wiki.apache.org/solr/SpellCheckComponent
+     -->
+  <searchComponent name="spellcheck" class="solr.SpellCheckComponent">
+
+    <str name="queryAnalyzerFieldType">textSpell</str>
+
+    <lst name="spellchecker">
+      <str name="name">default</str>
+      <str name="field">suggestions</str>
+      <str name="spellcheckIndexDir">./spellchecker1</str>
+      <str name="buildOnCommit">true</str>
+    </lst>
+  </searchComponent>
+  <requestHandler name="standard" class="solr.StandardRequestHandler" default="true">
+    <arr name="last-components">
+        <str>spellcheck</str>
+    </arr>
+  </requestHandler>
+
 
 
 
