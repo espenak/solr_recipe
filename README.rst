@@ -18,7 +18,7 @@ Requirements
 Usage
 #####
 
-Add something like this to your ``buildout.cfg``::
+1. Add something like this to your ``buildout.cfg``::
 
     [buildout]
     ...
@@ -32,18 +32,30 @@ Add something like this to your ``buildout.cfg``::
     solr_version = 3.6.2
     loglevel = INFO
 
-The configuration above will work with Haystack. It installs a ``run_solr.sh``
-script in ``bin/``, and stores data in ``var/solrdata/``.
+2. The configuration above will work with Haystack. It installs a ``run_solr.sh``
+   script in ``bin/``, and stores data in ``var/solr/data/``.
+3. Run ``bin/buildout``.
+4. Add ``schema.xml`` to ``var/solr/home/``. See ``solr_classpath`` for
+   information about how this works.
+5. Run ``bin/run_solr.sh``
+
+.. note::
+    If you use Haystack, you should use::
+    
+        $ manage.py build_solr_schema -f var/solr/home/conf/schema.xml
+
+    in step 3.
+
 
 
 Options
 #############
 
+``solr_version`` (**required**)
+    The solr version to download from the ``mirror``.
 ``mirror``
     The Apache mirror to download from. Defaults to
     http://archive.apache.org/dist/lucene/solr/.
-``solr_version``
-    The solr version to download from the ``mirror``.
 ``java_executable``
     The Java executable to use in ``run_solr.sh``. Defaults to ``java``.
 ``solr_logconfig_tplfile``
@@ -63,8 +75,28 @@ Options
 ``solr_datadir``
     The directory where solr should store data. This is forwarded to
     solr via ``-Dsolr.data.dir`` in ``run_solr.sh``. Defaults to
-    ``var/solrdata/``. The directory is created (recursively) if it does not
-    exist.
+    ``var/<sectionname>/data/``, where ``<sectionname>`` is the name
+    of the buildout config section (``solr`` in the example above).
+    The directory is created (recursively) if it does not exist.
 ``solr_home``
     Instead of using our example config-directory, you can configure your own
-    using this option.
+    using this option. Defaults to ``var/<sectionname>/home/``, which is copied
+    from the `solr_recipe/files/example-solr3.6-config/`_-directory in the
+    python package if it does not exists (links to the latest version - select
+    the tag matching your version to view the actual files). The default
+    directory does not include a ``schema.xml``.
+``solr_classpath``
+    Add extra directories to the Java classpath. Added to ``run_solr.sh`` with
+    the ``-classpath`` option. Refer to ``java -help`` for more info about the
+    format. You can use this to provide a directory where you override any
+    config files in ``solr_home``. Defaults to
+    ``var/<sectionname>/config_overrides``.
+
+
+.. note::
+    We create ``var/<sectionname>/config_overrides`` even when it is not on the
+    ``solr_classpath``. This is simply because it does not hurt, and detecting if
+    it is on the classpath is just unneeded complexity.
+
+
+.. _`solr_recipe/files/example-solr3.6-config/`: https://github.com/espenak/solr_recipe/tree/master/solr_recipe/files/example-solr3.6-config

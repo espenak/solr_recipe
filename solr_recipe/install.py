@@ -43,6 +43,7 @@ class InstallSolr(object):
 
         partsdir = buildout['buildout']['parts-directory']
         self.installdir = join(partsdir, self.name)
+        self.vardir = join(buildout['buildout']['directory'], 'var', self.name)
 
         defaults = {
             'mirror': self.default_mirror,
@@ -50,7 +51,7 @@ class InstallSolr(object):
             'java_executable': 'java',
             'loglevel': 'INFO',
             'solr_logconfig_tplfile': None,
-            'solr_datadir': join(buildout['buildout']['directory'], 'var', 'solrdata')
+            'solr_datadir': join(self.vardir, 'data')
         }
         self.real_options = dict(defaults)
         self.real_options.update(options)
@@ -62,6 +63,7 @@ class InstallSolr(object):
             posixpath.join(solr_version, self.archivename))
         self.archivepath = join(partsdir, self.archivename)
         self.solrdir = join(self.installdir, archivedirname)
+        self.default_solr_home = join(self.vardir, 'home')
 
     def _download(self):
         self.log.info('Downloading %s to %s', self.download_url, self.archivepath)
@@ -87,10 +89,9 @@ class InstallSolr(object):
 
     def _create_solr_home(self):
         source = resource_filename(__name__, "files/example-solr3.6-config")
-        dest = join(self.installdir, 'sorl-config')
-        if exists(dest):
-            shutil.rmtree(dest)
-        shutil.copytree(source, dest)
+        dest = self.default_solr_home
+        if not exists(dest):
+            shutil.copytree(source, dest)
         return dest
 
     def _create_binscript(self):
@@ -114,6 +115,9 @@ class InstallSolr(object):
     def install(self):
         if not exists(self.installdir):
             mkdir(self.installdir)
+        if not exists(self.vardir):
+            makedirs(self.vardir)
+
         self.log.info('Installing Apache Solr from: %s', self.download_url)
         if not exists(self.archivepath):
             self._download()
