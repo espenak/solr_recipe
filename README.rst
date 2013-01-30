@@ -1,4 +1,3 @@
-
 =========================
 solr_recipe
 =========================
@@ -39,8 +38,7 @@ Usage
    information about how this works.
 5. Run ``bin/run_solr.sh``
 
-.. note::
-    If you use Haystack, you should use::
+.. note:: If you use Haystack, you should use::
     
         $ python manage.py build_solr_schema -f var/solr/home/conf/schema.xml
 
