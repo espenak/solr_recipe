@@ -48,6 +48,7 @@ class InstallSolr(object):
             'mirror': self.default_mirror,
             'delete_downloaded_archive': False,
             'java_executable': 'java',
+            'loglevel': 'INFO',
             'solr_logconfig_tplfile': None,
             'solr_datadir': join(buildout['buildout']['directory'], 'var', 'solrdata')
         }

@@ -57,6 +57,9 @@ Options
         # Write to the console:
         handlers = java.util.logging.ConsoleHandler
 
+``loglevel``
+    Specifies the loglevel for the ``solr_logconfig_tplfile``.
+    Defaults to ``INFO``.
 ``solr_datadir``
     The directory where solr should store data. This is forwarded to
     solr via ``-Dsolr.data.dir`` in ``run_solr.sh``. Defaults to
