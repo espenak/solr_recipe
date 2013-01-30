@@ -3,6 +3,7 @@ from os.path import join
 from os.path import exists
 import tarfile
 from os import mkdir
+from os import makedirs
 from os import chmod
 import posixpath
 import urlparse
@@ -48,16 +49,16 @@ class InstallSolr(object):
             'delete_downloaded_archive': False,
             'java_executable': 'java',
             'solr_logconfig_tplfile': None,
-            'solr_datadir': join(self.installdir, 'data')
+            'solr_datadir': join(buildout['buildout']['directory'], 'var', 'solrdata')
         }
         self.real_options = dict(defaults)
         self.real_options.update(options)
 
-        version = options['version']
-        archivedirname = 'apache-solr-{version}'.format(version=version)
+        solr_version = options['solr_version']
+        archivedirname = 'apache-solr-{solr_version}'.format(solr_version=solr_version)
         self.archivename = '{0}.tgz'.format(archivedirname)
         self.download_url = urlparse.urljoin(self.real_options['mirror'],
-            posixpath.join(version, self.archivename))
+            posixpath.join(solr_version, self.archivename))
         self.archivepath = join(partsdir, self.archivename)
         self.solrdir = join(self.installdir, archivedirname)
 
@@ -118,6 +119,8 @@ class InstallSolr(object):
             self._extract()
         elif not exists(self.solrdir):
             self._extract()
+        if not exists(self.real_options['solr_datadir']):
+            makedirs(self.real_options['solr_datadir'])
         self._create_binscript()
         managed_files = [self.installdir]
         if self.real_options['delete_downloaded_archive']:

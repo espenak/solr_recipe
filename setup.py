@@ -2,12 +2,12 @@ from setuptools import setup, find_packages
 
 
 setup(name = 'solr_recipe',
-    description = 'Buildout recipe that installs solr using Maven.',
+    description = 'Buildout recipe that installs and configures Apache Solr. The default setup works with haystack 1.2.3.',
     license='Apache',
     version = '1.0',
     url = 'http://github.com/espenak/solr_recipe',
     author = 'Espen Angell Kristiansen',
-    long_description='See https://github.com/espenak/solr_recipe',
+    long_description=open('README.rst').read(),
     packages=find_packages(exclude=['ez_setup', 'fabfile']),
     install_requires = ['distribute', 'Django', 'Jinja2'],
     include_package_data=True,
