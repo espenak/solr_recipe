@@ -116,10 +116,5 @@ Options
             echo "Solr was stopped. Exited with exit code $?"
 
 
-.. note::
-    We create ``var/<sectionname>/config_overrides`` even when it is not on the
-    ``solr_classpath``. This is simply because it does not hurt, and detecting if
-    it is on the classpath is just unneeded complexity.
-
 
 .. _`solr_recipe/files/example-solr3.6-config/`: https://github.com/espenak/solr_recipe/tree/master/solr_recipe/files/example-solr3.6-config
